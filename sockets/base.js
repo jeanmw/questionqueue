@@ -10,18 +10,65 @@ var Comment = require('mongoose').model('Comment');
 module.exports = function (io) {  
   // io.set('origins', '*localhost:1337');
   io.on('connection', function (socket){
-    console.log('user connected');
-    // var room = "some room"
-    // socket.join(room, function () {
-    //   console.log("joined room " + room)
-    // })
+    // BROADCAST TOTAL QUESTION COOKIE CLIENTS
+    // var totalClientsCount = Object.keys(io.sockets.sockets).length
+    // io.sockets.emit('broadcast.total_clients_count', totalClientsCount)
+    // console.log(totalClientsCount);
 
-    socket.on('join.room', function (data) {
-      console.log('user joined room');
-      console.log(data);
-      io.sockets.emit('broadcast.join_room', data)
+    // socket.on('disconnect', function (data) {
+    //   var totalClientsCount = Object.keys(io.sockets.sockets).length
+    //   io.sockets.emit('broadcast.total_clients_count', totalClientsCount)
+    // });
+
+    function getClientCount(roomName) {
+      var room = io.sockets.adapter.rooms[roomName]; 
+      if (room) {
+        return Object.keys(room).length;  
+      } else {
+        return 0;
+      }
+    }
+    
+    // PUBLISH JOINING ROOM
+    socket.on('publish.join_room', function (data) {
+      console.log('user joined room', data.roomName);
+      socket.join(data.roomName);
+
+      var clientsCount = getClientCount(data.roomName)
+      //GET ROOM USER COUNT SOCKET.IO >=1.3.5
+      
+      io.sockets.in(data.roomName).emit('broadcast.join_room', clientsCount)
     });
 
+    // PUBLISH LEAVING ROOM
+    socket.on('publish.leave_room', function (data) {
+      console.log('user left room ', data.roomName);
+      socket.leave(data.roomName);
+
+      var clientsCount = getClientCount(data.roomName)
+
+      io.sockets.in(data.roomName).emit('broadcast.leave_room', clientsCount)
+    });
+    
+    // PUBLISH POST
+    socket.on('publish.post', function (data) {
+      console.log(data);
+      var roomName = data.roomName.toLowerCase()
+      var post = new Post({
+          body: data.body
+        , room_name: data.roomName.toLowerCase()
+      });
+      console.log(post);
+      post.save(function (err, post) {
+        console.log('post saved to room', post.room_name)
+        if (err) { 
+          return io.sockets.in(post.room_name).emit('error', post); 
+        }
+        io.sockets.in(post.room_name).emit('broadcast.post', post);
+      });
+    });
+
+    // PUBLISH COMMENT
     socket.on('publish.comment', function (data) {
       console.log(data);
       Post.findById(data.post_id, function (err, post) {
@@ -32,31 +79,11 @@ module.exports = function (io) {
         post.save(function (err, post) {
           if(err) { 
             console.log(err) 
-            return io.sockets.emit('error', comment); 
+            return io.sockets.in(post.room_name).emit('error', comment); 
           }
-          return io.sockets.emit('broadcast.comment', post);
+          return io.sockets.in(post.room_name).emit('broadcast.comment', post);
         })
       })
-    });
-    
-    // PUBLISH POST
-    socket.on('publish.post', function (data) {
-      console.log(data);
-      var post = new Post({
-          body: data.body
-        , room_name: data.room_name.toLowerCase()
-      });
-      console.log(post);
-      post.save(function (err, post) {
-        console.log('post saved')
-        if (err) { 
-          console.log(err);
-          // io('/my-namespace')
-          return io.sockets.emit('error', post); 
-        }
-
-        io.sockets.emit('broadcast.post', post);
-      });
     });
 
     // VOTE UP
@@ -65,9 +92,9 @@ module.exports = function (io) {
         console.log(post)
         if (err) { 
           console.log(err);
-          return io.sockets.emit('error', post); 
+          return io.sockets.in(post.room_name).emit('error', post); 
         }
-        io.sockets.emit('broadcast.vote_up', post);
+        io.sockets.in(post.room_name).emit('broadcast.vote_up', post);
       });
     });
 
@@ -76,15 +103,10 @@ module.exports = function (io) {
         console.log(post)
         if (err) { 
           console.log(err);
-          return io.sockets.emit('error', post); 
+          return io.sockets.in(post.room_name).emit('error', post); 
         }
-        io.sockets.emit('broadcast.vote_down', post);
+        io.sockets.in(post.room_name).emit('broadcast.vote_down', post);
       });
-    });
-
-    socket.on('disconnect', function (data) {
-      console.log('user disconnected');
-      io.sockets.emit('broadcast.user_disconnected', data)
     });
   });
 }

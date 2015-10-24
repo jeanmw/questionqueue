@@ -2,7 +2,7 @@
  * FILTERS
  */
 
-angular.module('myApp.filters', [])
+angular.module('question-cookie.filters', [])
   // A simple relative timestamp filter
     .filter('relativets', function() {
       return function(value) {

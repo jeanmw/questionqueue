@@ -13,8 +13,6 @@ var config = require('./config')
   , bodyParser = require('body-parser')
   , flash = require('connect-flash')
   , session = require('express-session')
-  // , cookieParser = require('cookie-parser')
-  // , cookie = require('cookie')
   , server = app.listen(config.port)
   , io = require('socket.io').listen(server);
 

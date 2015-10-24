@@ -4,17 +4,17 @@
 
 'use strict';
 
-angular.module('myApp', ['ngResource', 
+angular.module('question-cookie', ['ngResource', 
                          'ngRoute', 
                          'ngSanitize', 
                          'ngTouch', 
                          'btford.socket-io',
                          'ngCookies',
                          'angularMoment',
-                         'myApp.services', 
-                         'myApp.directives', 
-                         'myApp.interceptors',
-                         'myApp.filters'])
+                         'question-cookie.services', 
+                         'question-cookie.directives', 
+                         'question-cookie.interceptors',
+                         'question-cookie.filters'])
 
   // .constant('HOST', 'http://localhost:1337') //DEV
   .constant('HOST', 'http://www.questioncookie.com') //PRODUCTION
@@ -23,14 +23,14 @@ angular.module('myApp', ['ngResource',
   //   amMoment.changeLocale('de');
   // })
 
-  .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'templates/room-show'
-      , controller: 'RoomIndexCtrl'
+        templateUrl: 'templates/splash'
+      , controller: 'SplashCtrl'
       })
 
-      .when('/:room_name', {
+      .when('/:roomName', {
         templateUrl: 'templates/post-index'
       , controller: 'PostIndexCtrl'
       })

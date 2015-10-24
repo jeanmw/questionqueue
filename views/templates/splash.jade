@@ -7,7 +7,7 @@
     .col-sm-6.col-sm-offset-3
       .event-name
         form(ng-submit="enterRoom()")
-          input.hash-input(ng-model="room_name", placeholder="EventName", ng-space, autofocus)
+          input.hash-input(ng-model="roomName", placeholder="EventName", ng-space, autofocus)
           button.pull-right.btn.qq-btn.hash-tag.enter-room-btn#enterRoom(ng-click="enterRoom()")
             i.icon.ion-log-in 
         .text-center.margin-top 
@@ -35,3 +35,7 @@
         i.icon.ion-clock
         |  Everything in Real Time
       p.lead Questions and votes and comments all happen in real time across everyone who is participating. Start and share your QuestionCookie and the crowd does the rest.
+.footer
+  .container
+    .row.text-center
+      h4 Built by #[a(href="https://www.linkedin.com/in/ajbraus", target="_blank") Adam Braus] - San Francisco, CA 2015 

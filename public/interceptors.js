@@ -4,7 +4,7 @@
 
 'use strict';
 
-angular.module('myApp.interceptors', []).
+angular.module('question-cookie.interceptors', []).
   config( function ($provide, $httpProvider) {
     // register the interceptor as a service
     $provide.factory('AuthHttpInterceptor', function ($q, HOST, $location, $rootScope) {

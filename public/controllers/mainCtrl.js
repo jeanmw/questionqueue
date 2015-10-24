@@ -4,9 +4,25 @@
 
 'use strict';
 
-angular.module('myApp')
-  .controller('MainCtrl', function ($scope, $rootScope) {
-    // $rootScope.$on('enteredRoom', function(event, room_name) { 
-    //   $scope.room_name = room_name;
-    // });
-  });
+angular.module('question-cookie')
+	.controller('MainCtrl', ['$location', '$scope', '$rootScope', function ($location, $scope, $rootScope) {
+
+	}])
+
+  .controller('SplashCtrl', ['$location', '$scope', '$rootScope', function ($location, $scope, $rootScope) {
+  	
+  	// $scope.$on('socket:broadcast.total_clients_count', function (event, totalClientsCount) {
+  	//   console.log(totalClientsCount)
+  	//   $scope.$apply(function() {
+  	//     $scope.totalClientsCount = totalClientsCount;
+  	//   })
+  	// });
+
+  	$scope.roomName = ''
+  	
+  	$scope.enterRoom = function() {
+  		console.log('blah')
+  	  $location.path("/" + $scope.roomName);
+  	}
+  }])
+

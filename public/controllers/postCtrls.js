@@ -4,20 +4,71 @@
 
 'use strict';
 
-angular.module('myApp')
-  .controller('PostIndexCtrl', function ($scope, $rootScope, Post, Socket, $routeParams, $cookies, $location) {
+angular.module('question-cookie')
+  .controller('PostIndexCtrl', function ($scope, $rootScope, Post, socket, $routeParams, $cookies, $location) {
+    $scope.roomName = $routeParams.roomName
+
+    //JOIN ROOM
+    socket.emit('publish.join_room', { roomName: $routeParams.roomName });
+
+    $scope.$on('socket:broadcast.join_room', function (event, clientsCount) {
+      console.log(clientsCount)
+      $scope.$apply(function() {
+        $scope.clientsCount = clientsCount;
+      })
+    });
+
+    // LEAVE ROOM
+    window.onbeforeunload = leaveRoom;
+    function leaveRoom() {
+      socket.emit("publish.leave_room", { roomName: $routeParams.roomName });
+      return null;
+    }
+    $scope.$on('socket:broadcast.leave_room', function (event, clientsCount) {
+      $scope.$apply(function() {
+        $scope.clientsCount = clientsCount;
+      });
+    });
+
+
+    // POSTS // 
+
+    $scope.posts = Post.query({ "roomName": $routeParams.roomName });
+    
+    // PUBLISH POST
+    $scope.post = { "roomName": $routeParams.roomName };
+
+    $scope.publishPost = function () {
+      // console.log($scope.post)
+      socket.emit('publish.post', $scope.post);
+      $scope.post.body = ''     
+    };
+
+    $scope.$on('socket:broadcast.post', function (event, post) {
+      console.log('publishing post:', post)
+      // if (post.roomName.toLowerCase() == $routeParams.roomName.toLowerCase()) {
+        $scope.$apply(function() {
+          $scope.posts.unshift(post);     
+        });
+      // };
+    });
+
+
+    // COMMENTS //
+
+    // PUBLISH COMMENT
     $scope.comment = {};
     $scope.createComment = function(post) {
       console.log(post)
       $scope.comment.post_id = post._id
-      Socket.emit('publish.comment', $scope.comment);
+      socket.emit('publish.comment', $scope.comment);
       $scope.comment.body = ''
       post.newComment = false;
     };
 
-    // PUBLISH COMMENT
+    // ON COMMENT PUBLISHED
     $scope.$on('socket:broadcast.comment', function (event, post) {
-      if (post.room_name.toLowerCase() == $routeParams.room_name.toLowerCase()) {
+      if (post.room_name.toLowerCase() == $routeParams.roomName.toLowerCase()) {
         var comment = post.comments[0]
         console.log(comment)
         $scope.$apply(function() {
@@ -27,39 +78,32 @@ angular.module('myApp')
       };
     });
 
+    // SWITCH ORDER NEWEST/VOTES
     $scope.order = '-created_at';
-    $scope.orderButton = "Newest"
+    $scope.orderButton = "Recent"
 
     $scope.switchOrder = function() {
       if ($scope.order == '-created_at') {
         console.log("vote_count")
         $scope.order = '-votes_count';
-        $scope.orderButton = "Votes"
+        $scope.orderButton = "Most Votes"
       }  else {
         console.log("created_at")
         $scope.order = '-created_at'
-        $scope.orderButton = "Newest"
+        $scope.orderButton = "Recent"
       }
     }
 
-    $scope.room_name = $routeParams.room_name
-    
-    $scope.enterRoom = function() {
-      $location.path("/" + $scope.room_name);
+
+
+    // HANDLE VOTING WITH COOKIES
+
+    // NO VOTING WITHOUT COOKIES
+    $scope.hasCookiesEnabled = true;
+    if (!navigator.cookieEnabled) {
+      alert("You must enable Cookies in order to vote on questions.")
+      $scope.hasCookiesEnabled = false;
     }
-
-    // GET POSTS
-    $scope.posts = Post.query({ "room_name": $routeParams.room_name });
-    $scope.post = { "room_name": $routeParams.room_name };
-
-    // PUBLISH POST
-    $scope.$on('socket:broadcast.post', function (event, post) {
-      if (post.room_name.toLowerCase() == $routeParams.room_name.toLowerCase()) {
-        $scope.$apply(function() {
-          $scope.posts.unshift(post);     
-        });
-      };
-    });
 
     $scope.alreadyVoted =  function(post, direction){
       if (direction === 'up') {
@@ -68,12 +112,6 @@ angular.module('myApp')
         return $scope.vdp_ids.indexOf(post._id) > -1
       }
     }
-
-    $scope.publishPost = function () {
-      // console.log($scope.post)
-      Socket.emit('publish.post', $scope.post);
-      $scope.post.body = ''     
-    };
 
     if (!$cookies.vup_ids) {
       $scope.vup_ids = [];
@@ -100,7 +138,7 @@ angular.module('myApp')
         console.log('already voted up')
         console.log($scope.vup_ids)
       } else {
-        Socket.emit("vote_up.post", { id: post._id });
+        socket.emit("vote_up.post", { id: post._id });
 
         if ($scope.vdp_ids.indexOf(post._id) > -1) {
           //remove from vote down ids
@@ -126,7 +164,7 @@ angular.module('myApp')
         console.log('already voted down')
         console.log($scope.vdp_ids)
       } else {
-        Socket.emit("vote_down.post", { id: post._id });  
+        socket.emit("vote_down.post", { id: post._id });  
 
         if ($scope.vup_ids.indexOf(post._id) > -1) {
           //remove from vote up ids
@@ -144,11 +182,4 @@ angular.module('myApp')
       // DECREMENT vote_count
       post.votes_count = --post.votes_count
     });
-
-    // NO VOTING WITHOUT COOKIES
-    $scope.hasCookiesEnabled = true;
-    if (!navigator.cookieEnabled) {
-      alert("You must enable Cookies in order to vote on questions.")
-      $scope.hasCookiesEnabled = false;
-    }
   });

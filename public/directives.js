@@ -4,7 +4,7 @@
 
 'use strict';
 
-angular.module('myApp.directives', ['myApp.services'])
+angular.module('question-cookie.directives', ['question-cookie.services'])
   .directive('ngSpace', function() {
     return function(scope, element, attrs) {
       element.bind("keydown keypress", function(event) {

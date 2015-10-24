@@ -1,9 +1,8 @@
+add gulp to delint, minify, and uglify code and assets
+deliver assets from cdn?
 
-fix mobile responsive
-add footer
-
-improve SEO
 add sharing twitter and facebook sharing
+improve SEO
 
 make it styled more like trello with questions filling in to the right
 if you have two comments open, newComment.text is in all input fields
@@ -130,3 +129,12 @@ DONE display questions created at with nice '1m' notation
 DONE Need cookies turned on . . .
 DONE style comments a bit better
 DONE make comments appear
+
+
+DONE don't connect until in room
+DONE join rooms 
+  DONE count connected users
+  DONE emmit only to that room
+  DONE leave room - update connection count
+DONE fix mobile responsive
+DONE add footer

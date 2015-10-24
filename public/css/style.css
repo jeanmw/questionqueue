@@ -1,33 +1,49 @@
-html, body, .tall {height: 100%; min-height: 100%}
+html, body {height: 100%; min-height: 100%}
+
+a {
+  color:grey;
+}
+
+i {
+  font-style: normal;
+}
+
+a:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color:grey;
+}
 
 .background-grey {
   background-color: #FCFCFC;
-  padding-top:60px;
+}
+
+.sort-by {
+  margin:25px 0 7px 0;
 }
 
 .jumbotron {
   background: rgb(255, 89, 89);
   color:white;
-  -webkit-box-shadow: 0px 4px 41px -16px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 4px 41px -16px rgba(0,0,0,0.75);
-  box-shadow: 0px 4px 41px -16px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 4px 30px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 4px 30px -15px rgba(0,0,0,0.75);
+  box-shadow: 0px 4px 30px -15px rgba(0,0,0,0.75);
   margin-bottom:100px;
 }
 
 .navbar {
-/*  position: fixed;
-  width: 100%;
-*/  -webkit-box-shadow: 0px 4px 41px -16px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 4px 41px -16px rgba(0,0,0,0.75);
-  box-shadow: 0px 4px 41px -16px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 4px 30px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 4px 30px -15px rgba(0,0,0,0.75);
+  box-shadow: 0px 4px 30px -15px rgba(0,0,0,0.75);
   background: rgb(255, 89, 89);
   margin-bottom:0px;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
   border-radius: 0px;
+  border: 0;
 }
 
-.navbar h2 {
+.navbar h3 {
   color:white;
   margin-bottom: 23px;
 }
@@ -38,8 +54,8 @@ html, body, .tall {height: 100%; min-height: 100%}
 .navbar-brand {
   float: left;
   height: 63px;
-  padding: 27px;
-  font-size: 32px;
+  padding: 23px;
+  font-size: 28px;
   line-height: 20px;
   font-weight: 700;
 }
@@ -85,13 +101,13 @@ textarea {
 }
 
 .tall {
-  min-height: 100%;
+  min-height: 98%;
+  min-height:600px;
 }
 .borders {
   border-left:1px solid #eee;
   border-right:1px solid #eee;  
   border-top:1px solid #eee;
-  min-height:100%;
   padding:0;
 }
 
@@ -240,3 +256,18 @@ textarea:focus, input:focus {
   right: 0;
 }
 
+.clients-count {
+  font-family: helvetica;
+  position: absolute;
+  right:20px;
+  top: 21px;
+  font-size:130%;
+  color:white;
+}
+
+.footer {
+  height: 300px;
+  padding:140px 0 ; 
+  color:white;
+  background: #353839;
+}

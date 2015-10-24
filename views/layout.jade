@@ -1,20 +1,18 @@
 doctype html
-html(lang="en", ng-app='myApp')
+html(lang="en", ng-app='question-cookie')
   head
     meta(charset='utf8')
-    meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1")
     base(href='/')
     title QuestionCookie | Free Real-Time Question Moderating 
-    meta(name="description" content="QuestionCookie.com is a free service for event planners and educators to automatically moderate question in real time. No sign up necessary, just enter a cookie to create or find your questions.")
+    meta(name="description" content="QuestionCookie.com is a free service for event planners and educators to automatically moderate question in real time. No sign up necessary, just enter a unique event name to start.")
     meta(name="keywords" content="Moderate, Questions, Google Moderator")
     
     meta(property="og:title" content="Free Real-Time Question Moderating")
     meta(property="og:url" content="http://www.questioncookie.com")
     meta(property="og:type" content="website")
     //- meta(property="og:image" content="")
-    meta(property="og:description" content="QuestionCookie.com is a free service for event planners and educators to automatically moderate question in real time. No sign up necessary, just enter a cookie to create or find your questions.")
-
-
+    meta(property="og:description" content="QuestionCookie.com is a free service for event planners and educators to automatically moderate question in real time. No sign up necessary, just enter a unique event name to start.")
     
     //- Latest compiled and minified CSS
     link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
@@ -52,7 +50,6 @@ html(lang="en", ng-app='myApp')
   script(type="text/javascript", src='/interceptors.js')
   script(type="text/javascript", src='/controllers/mainCtrl.js')
   script(type="text/javascript", src='/controllers/postCtrls.js')
-  script(type="text/javascript", src='/controllers/roomCtrls.js')
   script(type="text/javascript", src='/filters.js')
   script(type="text/javascript", src='/directives.js')
 
