@@ -33,9 +33,8 @@ nav.navbar.navbar-default
                 div.created-at asked  
                   span(am-time-ago="post.created_at")
               .margin-top
-                .text-right
-                  a.text-muted.small(href="#" ng-show="post.newComment" ng-click="post.newComment = false") cancel comment
-                  a.text-muted.small(href="#" ng-show="!post.newComment" ng-click="post.newComment = true") new comment
+                a.text-muted.small(href="#" ng-show="post.newComment" ng-click="post.newComment = false") cancel comment
+                a.text-muted.small(href="#" ng-show="!post.newComment" ng-click="post.newComment = true") new comment
                 form(ng-submit="createComment(post)" ng-show="post.newComment")
                   p.input-group.margin-top
                     input.form-control.input-sm(type='text', placeholder='Add a comment...' ng-model="comment.body" class="form-control")
