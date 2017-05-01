@@ -51,5 +51,3 @@ app.get('*', resources.index);
 
 module.exports = server;
 console.log(process.env.NODE_ENV  + ' server running at http://localhost:' + config.port);
-
-
