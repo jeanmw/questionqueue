@@ -2,7 +2,7 @@
  * SERVER.JS
  */
 
-process.env.NODE_ENV = process.env.PORT || 'development';
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var config = require('./config')
   , express = require('express')
@@ -53,4 +53,4 @@ require('./resources/posts')(app);
 app.get('*', resources.index);
 
 module.exports = server;
-console.log(process.env.PORT  + ' server running at http://localhost:' + config.port);
+console.log(process.env.NODE_ENV  + ' server running at http://localhost:' + config.port);
