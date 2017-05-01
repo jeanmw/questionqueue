@@ -2,7 +2,7 @@
  * SERVER.JS
  */
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = process.env.PORT || 'development';
 
 var config = require('./config')
   , express = require('express')
@@ -14,10 +14,13 @@ var config = require('./config')
   , flash = require('connect-flash')
   , session = require('express-session')
   , server = app.listen(config.port)
+  , cors = require('cors')
   , io = require('socket.io').listen(server);
 
 // app.use(express.static(__dirname + '/public'));
 app.use("/", express.static(path.join(__dirname, 'public')));
+
+app.use(cors());
 
 require('./sockets/base')(io);
 
@@ -50,4 +53,4 @@ require('./resources/posts')(app);
 app.get('*', resources.index);
 
 module.exports = server;
-console.log(process.env.NODE_ENV  + ' server running at http://localhost:' + config.port);
+console.log(process.env.PORT  + ' server running at http://localhost:' + config.port);
